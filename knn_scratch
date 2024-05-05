@@ -1,0 +1,39 @@
+import numpy as np
+
+# Input data with two features
+X = np.array([[2.5, 1.0],
+              [3.0, 1.5],
+              [4.0, 1.5],
+              [3.5, 2.0],
+              [3.5, 2.5],
+              [3.8, 3.0],
+              [2.0, 4.0],
+              [2.5, 4.5],
+              [2.8, 5.0],
+              [2.0, 2.0]])
+y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+print(len(y))
+print(len(X))
+k = 5
+
+
+x = [4.0,4.0]
+
+distances = []  # "0" : 12 , "0"  :45
+
+for i in range(0, len(X)):
+    distances.append([ ( ( (X[i][0] - x[0])**2 + (X[i][1] - x[1])**2 )  ** 0.5 ) , y[i]])
+
+
+arr = np.array(distances)
+
+print(arr)
+
+# Obtain indices that would sort the array based on the first column
+sorted_indices = np.argsort(arr[:, 0])
+
+# Rearrange rows of the array based on the sorted indices
+sorted_arr = arr[sorted_indices]
+
+
+print(sorted_arr)
