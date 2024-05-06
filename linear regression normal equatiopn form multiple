@@ -1,0 +1,76 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv('datasets/USA_Housing.csv')
+
+data.head()
+
+x=data[['Avg. Area Income', 'Avg. Area House Age', 'Avg. Area Number of Rooms',
+       'Avg. Area Number of Bedrooms', 'Area Population']]
+x.head()
+
+y=data['Price']
+y.head()
+
+y = np.array(y)
+
+n = data.shape[0]
+print("No of data: ",n)
+
+x_bias = np.ones((n,1))
+x_new = x_bias
+
+for (columnName, columnData) in x.iteritems():
+    tempArr = np.array(columnData)
+    tempNew = tempArr.reshape([-1,1])
+    x_new = np.append(x_new,tempNew,axis=1)
+
+
+x_new_transpose = np.transpose(x_new)
+
+
+
+x_new_transpose_dot_x_new = x_new_transpose.dot(x_new)
+#finding inverse of the matrix
+
+temp_1 = np.linalg.inv(x_new_transpose_dot_x_new)
+temp_1
+
+
+#finding the dot product of transposed X and Y
+
+temp_2 = x_new_transpose.dot(y)
+temp_2
+
+
+
+#finding coefficients
+
+theta = temp_1.dot(temp_2)
+theta
+
+
+def predict_values(theta, test_data):
+    y = []
+    for ind in test_data.index:
+        y.append(theta[0]) 
+        for idx, column in enumerate(test_data.columns):
+            y[ind] = y[ind]+theta[idx+1]*test_data[column][ind]
+    return y
+
+
+xyz = data[['Avg. Area Income', 'Avg. Area House Age', 'Avg. Area Number of Rooms',
+       'Avg. Area Number of Bedrooms', 'Area Population']]
+predicted_y = predict_values(theta, xyz)
+
+error = y - predicted_y
+absolute_error = np.sum(error)
+mean_absolute_error = absolute_error/n
+se = np.sum(error**2)
+mse = se/n
+print("Mean absolute error: ",mean_absolute_error)
+print("Mean Squared error: ",mse)
+print("Root mean Squared error: ",np.sqrt(mse))
+
+
